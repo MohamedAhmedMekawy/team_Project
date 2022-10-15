@@ -123,23 +123,38 @@ class HomeScreen extends StatelessWidget {
                             ],
                           ),
                           const SizedBox(
-                            height: 25,
+                            height: 20,
                           ),
-                          gradientButton(
-                            context: context,
-                            title: Text(
-                              'ScanText',style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 20
+                          Container(
+                            width: double.infinity,
+                            height: 60,
+                            decoration: BoxDecoration(
+                              color: Colors.blue,
+                              borderRadius: BorderRadius.only(
+                                topLeft: Radius.circular(12),
+                                bottomRight: Radius.circular(12),
+                              ),
                             ),
+                            child: OutlinedButton(
+                             onPressed: (){
+                               Navigator.push(context, MaterialPageRoute(builder: (context) => ScanText(
+            text: cubit.scannedText,
+          ),));},
+                                child: Text(
+                                    'ScanText',style: TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 20
+                                ),
+                               ),
+                             )
+                          ),
+                          gradientButton(context: context,
+                            title: Text(
+                              'sddssd'
                             ),
                             onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => ScanText(
-                                text: cubit.scannedText,
-                              ),
-                              )
-                              );
-                            },
+                            navigateTo(context, ChangePassword());
+                            }
 
                           )
                         ],
