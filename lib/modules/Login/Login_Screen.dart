@@ -1,8 +1,11 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:untitled1/components/components.dart';
 import 'package:untitled1/modules/Login/cubit/cubit.dart';
 import 'package:untitled1/modules/Login/cubit/state.dart';
 import 'package:untitled1/modules/home/home_screen.dart';
+import 'package:untitled1/shared/remote/cache_helper.dart';
 import 'package:untitled1/style/icon_broken.dart';
 import '../register/Register_Screen.dart';
 class LoginScreen extends StatelessWidget {
@@ -14,7 +17,16 @@ class LoginScreen extends StatelessWidget {
     return BlocProvider(
       create: (BuildContext context) => LoginCubit(),
       child: BlocConsumer<LoginCubit, LoginState>(
-        listener: (context, state){},
+        listener: (context, state){
+          if(state is AppLoginSuccessState){
+            if(state.loginModel.id != null){
+             navigateAndFinish(context, HomeScreen());
+            }
+            else{
+              print("error");
+            }
+          }
+        },
         builder: (context, state){
           return Scaffold(
               body: Form(
@@ -37,17 +49,7 @@ class LoginScreen extends StatelessWidget {
                                 color: Colors.black
                             ),
                           ),
-                          Text(
-                            'login now to the browse our hot offers',
-                            style: TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w300,
-                                color: Colors.grey[600]
-                            ),
-                          ),
-                          SizedBox(
-                            height: 20,
-                          ),
+
                           TextFormField(
                             controller: emailController,
                             keyboardType: TextInputType.emailAddress,
@@ -94,33 +96,37 @@ class LoginScreen extends StatelessWidget {
                           SizedBox(
                             height: 20,
                           ),
-                          Container(
-                          height: 50,
-                          color: Colors.grey[300],
-                          child: OutlinedButton(
-                            onPressed: (){
-                              if(formKey.currentState!.validate()){
-                                print(emailController.text);
-                                print(passwordController.text);
-                              }
-                              Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
-                            },
-                            child: Row(
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                  'LOGIN',
-                                    style: TextStyle(color: Colors.black,
-                                    fontSize: 20,
-                                      fontWeight: FontWeight.bold
+                          ConditionalBuilder(
+                            condition: state is! AppLoginErrorState,
+                            builder: (context) => Container(
+                            height: 50,
+                            color: Colors.grey[300],
+                            child: OutlinedButton(
+                              onPressed: (){
+                                if(formKey.currentState!.validate()){
+                                  LoginCubit.get(context).userLogin(
+                                      username: emailController.text,
+                                      password: passwordController.text);
+                                }
+                              },
+                              child: Row(
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                    'LOGIN',
+                                      style: TextStyle(color: Colors.black,
+                                      fontSize: 20,
+                                        fontWeight: FontWeight.bold
+                                      ),
                                     ),
                                   ),
-                                ),
-                                Icon(IconBroken.Login,size: 40,)
-                              ],
+                                  Icon(IconBroken.Login,size: 40,)
+                                ],
+                              ),
+                            )
                             ),
-                          )
+                            fallback: (context) => Center(child: CircularProgressIndicator()),
                           ),
 
                           Row(

@@ -6,8 +6,15 @@ import 'package:untitled1/cubit/cubit.dart';
 import 'package:untitled1/modules/Login/Login_Screen.dart';
 import 'package:untitled1/modules/home/home_screen.dart';
 import 'package:untitled1/modules/splash/splash_screen.dart';
+import 'package:untitled1/observer.dart';
+import 'package:untitled1/shared/network/dio_helper.dart';
+import 'package:untitled1/shared/remote/cache_helper.dart';
 
-void main() {
+void main() async{
+  WidgetsFlutterBinding.ensureInitialized();
+  Bloc.observer = MyBlocObserver();
+  DioHelper.init();
+  await CacheHelper.init();
   runApp(const MyApp());
 }
 class MyApp extends StatelessWidget {

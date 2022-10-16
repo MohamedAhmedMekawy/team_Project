@@ -2,6 +2,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:google_ml_kit/google_ml_kit.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:untitled1/cubit/states.dart';
+import 'package:untitled1/shared/end_points.dart';
+import 'package:untitled1/shared/network/dio_helper.dart';
 
 class AppCubit extends Cubit<AppStates> {
   AppCubit() : super(AppInitialState());
@@ -50,6 +52,8 @@ class AppCubit extends Cubit<AppStates> {
     }
     textScanning = false;
   }
+
+
 }
 
 

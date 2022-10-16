@@ -6,3 +6,4 @@ class AppErrorState extends  AppStates{}
 class AppSuccessChangeRateState extends  AppStates{}
 class SocialTakePhotoSuccessStates extends  AppStates{}
 class SocialTakePhotoErrorStates extends  AppStates{}
+

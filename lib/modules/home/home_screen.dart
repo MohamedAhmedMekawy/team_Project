@@ -148,15 +148,6 @@ class HomeScreen extends StatelessWidget {
                                ),
                              )
                           ),
-                          gradientButton(context: context,
-                            title: Text(
-                              'sddssd'
-                            ),
-                            onPressed: (){
-                            navigateTo(context, ChangePassword());
-                            }
-
-                          )
                         ],
                       )
                   ),
