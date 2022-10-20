@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:untitled1/components/components.dart';
+import 'package:untitled1/components/constance.dart';
 import 'package:untitled1/cubit/cubit.dart';
 import 'package:untitled1/cubit/states.dart';
 import 'package:untitled1/modules/change_password/change_password.dart';
@@ -269,6 +270,9 @@ class HomeScreen extends StatelessWidget {
         ),
          ListTile(
            onTap: (){
+
+                 signOut(context);
+
            },
            leading: Icon(IconBroken.Logout),
            title: Text(

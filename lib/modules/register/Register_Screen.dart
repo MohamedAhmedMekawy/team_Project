@@ -1,6 +1,10 @@
+import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:untitled1/components/components.dart';
+import 'package:untitled1/components/constance.dart';
 import 'package:untitled1/modules/home/home_screen.dart';
+import 'package:untitled1/shared/remote/cache_helper.dart';
 import 'package:untitled1/style/icon_broken.dart';
 import 'cubit/cubit.dart';
 import 'cubit/state.dart';
@@ -20,7 +24,18 @@ class RegisterScreen extends StatelessWidget
     return BlocProvider(
       create: (BuildContext context) => RegisterCubit(),
       child: BlocConsumer<RegisterCubit, RegisterStates>(
-        listener: (context, state) {},
+        listener: (context, state) {
+          if(state is RegisterSuccessState){
+            if(state.loginModel.status!){
+              CacheHelper.saveData(key: 'token', value: state.loginModel.id).then((value) {
+                token = state.loginModel.id!;
+                navigateAndFinish(context, HomeScreen());
+              });
+
+            }
+
+          }
+        },
         builder: (context, state)
         {
           return Scaffold(
@@ -116,57 +131,43 @@ class RegisterScreen extends StatelessWidget
                             labelText: 'Enter Your Password',
                           ),
                         ),
-                        SizedBox(
-                          height: 10,
-                        ),
-                        TextFormField(
-                          controller: phoneController,
-                          keyboardType: TextInputType.phone,
-                          validator: (value){
-                            if(value!.isEmpty){
-                              return 'please enter your phone';
-                            }
-                          },
-
-                          decoration: InputDecoration(
-                            border: OutlineInputBorder(),
-                            labelText: 'Please Enter Your Phone Number',
-                            prefixIcon: Icon(IconBroken.Call)
-                          ),
-                        ),
-                        SizedBox(
+                        const SizedBox(
                           height: 30.0,
                         ),
-                        Container(
-                            height: 50,
-                            color: Colors.grey[300],
-                            child: OutlinedButton(
-                              onPressed: (){
-                            if(formKey.currentState!.validate()){
-                              print(emailController.text);
-                              print(passwordController.text);
-                              print(nameController.text);
-                              print(phoneController.text);
-                            }
-                            Navigator.push(context, MaterialPageRoute(builder: (context) => HomeScreen(),));
-                          },
-                              child: Row(
-                                crossAxisAlignment: CrossAxisAlignment.center,
-                                children: [
-                                  Expanded(
-                                    child: Text(
-                                      'REGISTER',
-                                      style: TextStyle(color: Colors.black,
-                                          fontSize: 20,
-                                          fontWeight: FontWeight.bold
+                        ConditionalBuilder(
+                          condition: !RegisterCubit.get(context).isRigestaring ,
+                          builder: (context) => Container(
+                              height: 50,
+                              color: Colors.grey[300],
+                              child: OutlinedButton(
+                                onPressed: (){
+                              if(formKey.currentState!.validate()){
+                                RegisterCubit.get(context).register(context,
+                                    name: nameController.text,
+                                    email: emailController.text,
+                                    password: passwordController.text,
+                                   );
+                              }
+                            },
+                                child: Row(
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: const [
+                                    Expanded(
+                                      child: Text(
+                                        'REGISTER',
+                                        style: TextStyle(color: Colors.black,
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold
+                                        ),
                                       ),
                                     ),
-                                  ),
-                                  Icon(IconBroken.Login,size: 40,)
-                                ],
-                              ),
-                        )
+                                    Icon(IconBroken.Login,size: 40,)
+                                  ],
+                                ),
+                          )
                     ),
+                          fallback: (context) => const Center(child: CircularProgressIndicator()),
+                        ),
                       ],
                     ),
                   ),

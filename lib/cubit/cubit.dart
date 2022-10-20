@@ -12,9 +12,10 @@ class AppCubit extends Cubit<AppStates> {
 
   double rating = 0;
 
-  void changeRate(){
+  void changeRate() {
     emit(AppSuccessChangeRateState());
   }
+
   bool textScanning = false;
 
   XFile? imageFile;
@@ -35,7 +36,6 @@ class AppCubit extends Cubit<AppStates> {
       imageFile = null;
       scannedText = "Error occured while scanning";
       emit(SocialTakePhotoErrorStates());
-
     }
   }
 
@@ -52,15 +52,10 @@ class AppCubit extends Cubit<AppStates> {
     }
     textScanning = false;
   }
-
-
 }
 
 
-
-
-
- /* File? imageFile;
+/* File? imageFile;
   var picker = ImagePicker();
   Future<void> getFromCamera() async {
     final pickedFile = await picker.pickImage(

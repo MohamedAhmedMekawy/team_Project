@@ -18,3 +18,5 @@ class AppLoginErrorState extends  LoginState{
 
   AppLoginErrorState(this.error);
 }
+
+class ErrorWidetChangeState extends  LoginState{}

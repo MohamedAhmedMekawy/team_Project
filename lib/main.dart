@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:untitled1/components/constance.dart';
 import 'package:untitled1/cubit/cubit.dart';
 import 'package:untitled1/modules/Login/Login_Screen.dart';
 import 'package:untitled1/modules/home/home_screen.dart';
@@ -15,11 +16,24 @@ void main() async{
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
   await CacheHelper.init();
-  runApp(const MyApp());
+ token = CacheHelper.getData(key: 'token');
+ print(token);
+ Widget widget;
+  if(SplashPage != null)
+  {
+    if(token != null) widget = HomeScreen();
+    else widget = LoginScreen();
+  } else
+  {
+    widget = SplashPage();
+  }
+  runApp( MyApp(startWidget: widget,));
 }
 class MyApp extends StatelessWidget {
-  const MyApp({Key? key}) : super(key: key);
-
+  final Widget startWidget;
+  MyApp({
+    required this.startWidget
+});
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -49,7 +63,7 @@ class MyApp extends StatelessWidget {
           ),
             fontFamily: 'Jannah'
         ),
-        home:  SplashPage(),
+        home:  startWidget,
       ),
     );
   }

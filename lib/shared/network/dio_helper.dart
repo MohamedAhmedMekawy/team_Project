@@ -1,48 +1,46 @@
 import 'package:dio/dio.dart';
 
-class DioHelper{
+class DioHelper {
   static late Dio dio;
 
-  static init(){
-    dio = Dio(
-      BaseOptions(
-        baseUrl:  'https://scan-for-solution.herokuapp.com/auth/',
-        receiveDataWhenStatusError: true,
-      )
-    );
+  static init() {
+    dio = Dio(BaseOptions(
+      baseUrl: 'https://scan-for-solution-api.herokuapp.com',
+      receiveDataWhenStatusError: true,
+    ))
+      ..interceptors.add(
+        LogInterceptor(
+          responseBody: true,
+          requestBody: true,
+        ),
+      );
   }
 
   static Future<Response> getData({
     required String url,
-   Map<String, dynamic>? query,
-    String? lang = 'en',
+    Map<String, dynamic>? query,
+    String? lang = 'ar',
     String? token,
-  }) async
-  {
+  }) async {
     dio.options.headers = {
-      'lang' : lang,
-      'Authorization' : token??'',
-      'Content-Type' : 'application/json',
-
+      'lang': lang,
+      'Authorization': token ?? '',
+      'Content-Type': 'application/json',
     };
-    return await dio.get(
-    url,
-    queryParameters: query
-    );
+    return await dio.get(url, queryParameters: query);
   }
 
   static Future<Response> postData({
-  required String url,
+    required String url,
     Map<String, dynamic>? query,
-    required Map<String, dynamic> data ,
-    String lang = 'en',
+    required Map<String, dynamic> data,
+    String lang = 'ar',
     String? token,
-  }) async
-  {
+  }) async {
     dio.options.headers = {
-      'lang' : lang,
-      'Authorization' : token??'',
-      'Content-Type' : 'application/json',
+      'lang': lang,
+      'Authorization': token ?? '',
+      'Content-Type': 'application/json',
     };
 
     return await dio.post(
@@ -51,18 +49,18 @@ class DioHelper{
       data: data,
     );
   }
+
   static Future<Response> putData({
     required String url,
     Map<String, dynamic>? query,
-    required Map<String, dynamic> data ,
+    required Map<String, dynamic> data,
     String lang = 'en',
     String? token,
-  }) async
-  {
+  }) async {
     dio.options.headers = {
-      'lang' : lang,
-      'Authorization' : token??'',
-      'Content-Type' : 'application/json',
+      'lang': lang,
+      'Authorization': token ?? '',
+      'Content-Type': 'application/json',
     };
 
     return await dio.put(
@@ -71,19 +69,14 @@ class DioHelper{
       data: data,
     );
   }
-  static Future<Response> deleteData ({
-    required String url,
-    String lang = 'en',
-    String ?token
-  })async
-  {
-    dio.options.headers =
-    {
-      'lang' : lang,
-      'Authorization' : token??'',
-      'Content-Type' : 'application/json',
+
+  static Future<Response> deleteData(
+      {required String url, String lang = 'en', String? token}) async {
+    dio.options.headers = {
+      'lang': lang,
+      'Authorization': token ?? '',
+      'Content-Type': 'application/json',
     };
     return await dio.delete(url);
   }
-
 }
