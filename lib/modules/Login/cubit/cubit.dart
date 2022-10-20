@@ -25,21 +25,30 @@ class LoginCubit extends Cubit<LoginState> {
   Widget errorWidget = Container();
   LoginModel? loginModel;
 
-
-   void userLogin(context,{
+  Future<LoginModel?> userLogin(context,{
     required String username,
     required String password,
-  }) {
+  })async {
     emit(AppLoginLoadingState());
 
-
-    DioHelper.postData(
+   var response = await DioHelper.postData(
         url: LOGIN,
-        data: {'username': username, 'password': password}).then((value) {
+        data: {'username': username, 'password': password});
+   try{
+     if(response.statusCode == 200){
+       return loginModel = LoginModel.fromJson(response.data);
+     }
+
+   }catch(e){
+
+   }
+
+    /*.then((value) {
       loginModel = LoginModel.fromJson(value.data);
       print("succ");
       emit(AppLoginSuccessState(loginModel!));
     }).catchError((error) {
+
 
       print("####################################${error.toString()}");
       showDialog(
@@ -66,7 +75,7 @@ class LoginCubit extends Cubit<LoginState> {
           });
 
       emit(AppLoginErrorState(error.toString()));
-    });
+    });*/
   }
 
   void ErrorWidetChange({required Widget widget}) {
